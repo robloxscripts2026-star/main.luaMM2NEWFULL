@@ -1,5 +1,5 @@
--- [[ 🟢 CHRISSHUB V2 - BYPASS LOADED 🟢 ]]
--- [[ DEVELOPED BY: SASWARE32 | TIKTOK: @sasware32 ]]
+-- [[ 🟢 CHRISSHUB V2 SUPREME - OFFICIAL RELEASE 🟢 ]]
+-- [[ GITHUB REPOSITORY: robloxscripts2026-star / main.luaMM2NEWFULL ]]
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -9,7 +9,7 @@ local CoreGui = game:GetService("CoreGui")
 local lp = Players.LocalPlayer
 local camera = workspace.CurrentCamera
 
--- [[ 🔑 DATA & LICENSES ]]
+-- [[ 🔑 CONFIGURATION & DATABASE ]]
 local CH_KEYS = {
     "CHKEY_2964173850", "CHKEY_8317642950", "CHKEY_5729184630", "CHKEY_9463825170",
     "CHKEY_1857396240", "CHKEY_7248163950", "CHKEY_3692581740", "CHKEY_6159274830",
@@ -25,7 +25,7 @@ local Config = {
     }
 }
 
--- [[ 📢 NOTIFICACIONES ESTILO RECTÁNGULO ]]
+-- [[ 📢 NOTIFICATION SYSTEM ]]
 local function SendNotify(txt, col)
     local sg = Instance.new("ScreenGui", CoreGui)
     local frame = Instance.new("Frame", sg)
@@ -46,7 +46,7 @@ local function SendNotify(txt, col)
     end)
 end
 
--- [[ 👁️ SISTEMA VISUAL (ESP) ]]
+-- [[ 👁️ VISUAL ENGINE (ESP & TRACERS) ]]
 local function GetPlayerRole(p)
     if not p or not p.Character then return "Innocent" end
     if p.Character:FindFirstChild("Knife") or p.Backpack:FindFirstChild("Knife") then return "Murderer" end
@@ -86,7 +86,7 @@ end
 for _, v in pairs(Players:GetPlayers()) do if v ~= lp then CreateESP(v) end end
 Players.PlayerAdded:Connect(function(v) if v ~= lp then CreateESP(v) end end)
 
--- [[ ⚔️ LÓGICA DE COMBATE & BYPASS ]]
+-- [[ ⚔️ COMBAT LOGIC & BYPASS ]]
 RunService.RenderStepped:Connect(function()
     if Config.Toggles.WalkSpeed and lp.Character then lp.Character.Humanoid.WalkSpeed = 50 end
     if Config.Toggles.Noclip and lp.Character then
@@ -116,7 +116,7 @@ UserInputService.JumpRequest:Connect(function()
     if Config.Toggles.InfJump and lp.Character then lp.Character.Humanoid:ChangeState(3) end
 end)
 
--- [[ 🏙️ INTERFAZ AZUL NEÓN ]]
+-- [[ 🏙️ MAIN INTERFACE ]]
 local function BuildMain()
     local sg = Instance.new("ScreenGui", CoreGui)
     local main = Instance.new("Frame", sg)
@@ -178,7 +178,7 @@ local function BuildMain()
     RectBtn(cT, "AIMBOT", "Aimbot"); RectBtn(cT, "KILL AURA", "KillAura")
 end
 
--- [[ 🚀 INTRO CAYENDO ]]
+-- [[ 🚀 INTRO ANIMATION ]]
 local function StartIntro()
     local sg = Instance.new("ScreenGui", CoreGui)
     local txt = "CHRISSHUB V2"
@@ -198,7 +198,7 @@ local function StartIntro()
     task.wait(0.7); sg:Destroy(); BuildMain()
 end
 
--- [[ 🔑 KEY SYSTEM MORADO ]]
+-- [[ 🔑 KEY VALIDATION SYSTEM ]]
 local function RunKeys()
     local sg = Instance.new("ScreenGui", CoreGui)
     local f = Instance.new("Frame", sg); f.Size = UDim2.new(0, 330, 0, 230); f.Position = UDim2.new(0.5, -165, 0.5, -115)
