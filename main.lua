@@ -1,6 +1,5 @@
--- [[ 🟣 CHRISSHUB V6 GOLD - THE FINAL RE-MASTER 🟣 ]]
--- [[ ORDEN: KEY (MORADO) -> INTRO -> MENÚ (CON X) ]]
--- [[ AUTOFARM PRO INTEGRADO | SISTEMA DE MENSAJES ORIGINAL ]]
+-- [[ 🟣 CRISSHUB V6.1 - ANTI-FLING UPDATE 🟣 ]]
+-- [[ FIX: AUTOFARM ESTABLE | KEY MORADA | MENÚ AZUL CON X ]]
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -13,7 +12,6 @@ local camera = workspace.CurrentCamera
 if _G.ChrisHubLoaded then return end
 _G.ChrisHubLoaded = true
 
--- [[ 🔑 BASE DE DATOS ]]
 local CH_KEYS = {
     "CHKEY_2964173850", "CHKEY_8317642950", "CHKEY_5729184630", "CHKEY_9463825170",
     "CHKEY_1857396240", "CHKEY_7248163950", "CHKEY_3692581740", "CHKEY_6159274830",
@@ -31,7 +29,7 @@ local Config = {
     SpeedValue = 50
 }
 
--- [[ 📢 SISTEMA DE NOTIFICACIONES (DERECHA ORIGINAL) ]]
+-- [[ 📢 NOTIFICACIONES DERECHA ]]
 local function SendNotify(txt, col)
     task.spawn(function()
         local sg = Instance.new("ScreenGui", CoreGui)
@@ -41,53 +39,17 @@ local function SendNotify(txt, col)
         frame.BackgroundColor3 = Color3.fromRGB(5, 5, 10)
         Instance.new("UICorner", frame)
         local st = Instance.new("UIStroke", frame); st.Color = col; st.Thickness = 2
-        
         local l = Instance.new("TextLabel", frame)
         l.Size = UDim2.new(1, 0, 1, 0); l.Text = txt; l.TextColor3 = col
         l.Font = Enum.Font.GothamBold; l.BackgroundTransparency = 1; l.TextSize = 13
-        
         frame:TweenPosition(UDim2.new(1, -250, 0.15, 0), "Out", "Back", 0.5, true)
-        task.wait(3.5)
+        task.wait(3)
         frame:TweenPosition(UDim2.new(1, 10, 0.15, 0), "In", "Quad", 0.5, true)
         task.wait(0.6); sg:Destroy()
     end)
 end
 
--- [[ 👁️ MOTOR ESP ORIGINAL ]]
-local active_esp = {}
-local function GetRole(p)
-    if not p or not p.Character then return "Innocent" end
-    if p.Character:FindFirstChild("Knife") or p.Backpack:FindFirstChild("Knife") then return "Murderer" end
-    if p.Character:FindFirstChild("Gun") or p.Backpack:FindFirstChild("Gun") then return "Sheriff" end
-    return "Innocent"
-end
-
-local function CreateESP(p)
-    if active_esp[p] then return end
-    local highlight = Instance.new("Highlight", CoreGui)
-    local line = Drawing.new("Line")
-    line.Thickness = 2; line.Transparency = 1
-    active_esp[p] = {Highlight = highlight, Line = line}
-    
-    RunService.RenderStepped:Connect(function()
-        if p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Humanoid") then
-            local role = GetRole(p)
-            local color = (role == "Murderer" and Color3.new(1,0,0)) or (role == "Sheriff" and Color3.new(0,0.7,1)) or Color3.new(0,1,0)
-            local enabled = (role == "Murderer" and Config.Toggles.ESP_Murd) or (role == "Sheriff" and Config.Toggles.ESP_Sheriff) or (role == "Innocent" and Config.Toggles.ESP_Inno)
-            
-            if enabled and p.Character.Humanoid.Health > 0 then
-                highlight.Enabled = true; highlight.Adornee = p.Character; highlight.FillColor = color
-                local pos, vis = camera:WorldToViewportPoint(p.Character.HumanoidRootPart.Position)
-                if Config.Toggles.Traces and vis then
-                    line.Visible = true; line.Color = color; line.From = Vector2.new(camera.ViewportSize.X/2, camera.ViewportSize.Y); line.To = Vector2.new(pos.X, pos.Y)
-                else line.Visible = false end
-            else highlight.Enabled = false; line.Visible = false end
-        else highlight.Enabled = false; line.Visible = false end
-        if not Players:FindFirstChild(p.Name) then highlight:Destroy(); line:Remove(); active_esp[p] = nil end
-    end)
-end
-
--- [[ 💰 MOTOR AUTOFARM PRO (REESCRITO) ]]
+-- [[ 💰 MOTOR AUTOFARM ESTABLE (ANTI-FLING) ]]
 local function GetClosestCoin()
     local closest, dist = nil, math.huge
     for _, v in pairs(workspace:GetDescendants()) do
@@ -104,29 +66,62 @@ task.spawn(function()
         if Config.Toggles.AutoFarm and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
             local coin = GetClosestCoin()
             if coin then
+                -- ESTABILIZADOR
+                lp.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
                 lp.Character.Humanoid.PlatformStand = true
+                -- NOCLIP PARA EVITAR SALIR VOLANDO
+                for _, v in pairs(lp.Character:GetDescendants()) do
+                    if v:IsA("BasePart") then v.CanCollide = false end
+                end
                 lp.Character.HumanoidRootPart.CFrame = coin.CFrame * CFrame.new(0, -3.5, 0)
-            else
-                lp.Character.Humanoid.PlatformStand = false
-                lp.Character.HumanoidRootPart.CFrame = CFrame.new(0, 50, 0)
             end
         elseif lp.Character and lp.Character:FindFirstChild("Humanoid") then
-            lp.Character.Humanoid.PlatformStand = false
+            if not Config.Toggles.Noclip then
+                lp.Character.Humanoid.PlatformStand = false
+            end
         end
     end
 end)
 
--- [[ 🏙️ MENÚ AZUL CON BOTÓN X ]]
+-- [[ 👁️ ESP MOTOR ]]
+local active_esp = {}
+local function CreateESP(p)
+    if active_esp[p] then return end
+    local highlight = Instance.new("Highlight", CoreGui)
+    local line = Drawing.new("Line")
+    line.Thickness = 2; line.Transparency = 1
+    active_esp[p] = {Highlight = highlight, Line = line}
+    RunService.RenderStepped:Connect(function()
+        if p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+            local role = GetRole(p)
+            local color = (role == "Murderer" and Color3.new(1,0,0)) or (role == "Sheriff" and Color3.new(0,0.7,1)) or Color3.new(0,1,0)
+            local enabled = (role == "Murderer" and Config.Toggles.ESP_Murd) or (role == "Sheriff" and Config.Toggles.ESP_Sheriff) or (role == "Innocent" and Config.Toggles.ESP_Inno)
+            if enabled and p.Character.Humanoid.Health > 0 then
+                highlight.Enabled = true; highlight.Adornee = p.Character; highlight.FillColor = color
+                local pos, vis = camera:WorldToViewportPoint(p.Character.HumanoidRootPart.Position)
+                if Config.Toggles.Traces and vis then
+                    line.Visible = true; line.Color = color; line.From = Vector2.new(camera.ViewportSize.X/2, camera.ViewportSize.Y); line.To = Vector2.new(pos.X, pos.Y)
+                else line.Visible = false end
+            else highlight.Enabled = false; line.Visible = false end
+        else highlight.Enabled = false; line.Visible = false end
+        if not Players:FindFirstChild(p.Name) then highlight:Destroy(); line:Remove(); active_esp[p] = nil end
+    end)
+end
+
+function GetRole(p)
+    if not p or not p.Character then return "Innocent" end
+    if p.Character:FindFirstChild("Knife") or p.Backpack:FindFirstChild("Knife") then return "Murderer" end
+    if p.Character:FindFirstChild("Gun") or p.Backpack:FindFirstChild("Gun") then return "Sheriff" end
+    return "Innocent"
+end
+
+-- [[ 🏙️ MENÚ AZUL CON X ]]
 local function BuildMain()
     local sg = Instance.new("ScreenGui", CoreGui)
     local main = Instance.new("Frame", sg)
     main.Size = UDim2.new(0, 480, 0, 320); main.Position = UDim2.new(0.5, -240, 0.5, -160)
     main.BackgroundColor3 = Color3.fromRGB(5, 10, 25); Instance.new("UICorner", main)
     Instance.new("UIStroke", main).Color = Color3.fromRGB(0, 180, 255)
-
-    local shot = Instance.new("TextButton", sg)
-    shot.Size = UDim2.new(0, 130, 0, 50); shot.Position = UDim2.new(1, -150, 0.4, -60)
-    shot.BackgroundColor3 = Color3.fromRGB(0, 80, 255); shot.Text = "SHOTMURDER"; shot.TextColor3 = Color3.new(1,1,1); shot.Font = Enum.Font.GothamBold; Instance.new("UICorner", shot)
 
     local float = Instance.new("TextButton", sg)
     float.Size = UDim2.new(0, 70, 0, 70); float.Position = UDim2.new(0.05, 0, 0.4, 0); float.Visible = false; float.Text = "CH-HUB"; float.BackgroundColor3 = Color3.fromRGB(0, 150, 255); float.TextColor3 = Color3.new(1,1,1); Instance.new("UICorner", float).CornerRadius = UDim.new(1,0)
@@ -153,21 +148,14 @@ local function BuildMain()
             Config.Toggles[key] = not Config.Toggles[key]
             btn.BackgroundColor3 = Config.Toggles[key] and Color3.new(0, 1, 0) or Color3.new(1, 0, 0)
             SendNotify(name .. (Config.Toggles[key] and " ACTIVADO" or " DESACTIVADO"), Config.Toggles[key] and Color3.new(0,1,0) or Color3.new(1,0,0))
-            task.wait(2); btn.BackgroundColor3 = Color3.fromRGB(30, 35, 50)
+            task.wait(1); btn.BackgroundColor3 = Color3.fromRGB(30, 35, 50)
         end)
     end
 
     CreateFunc(t1, "NOCLIP", "Noclip"); CreateFunc(t1, "INF JUMP", "InfJump"); CreateFunc(t1, "SPEED", "WalkSpeed")
     CreateFunc(t2, "ESP ASESINO", "ESP_Murd"); CreateFunc(t2, "ESP SHERIFF", "ESP_Sheriff"); CreateFunc(t2, "TRACES", "Traces")
     CreateFunc(t3, "AIMBOT", "Aimbot"); CreateFunc(t3, "KILL AURA", "KillAura")
-    
-    local tps = Instance.new("TextButton", t3); tps.Size = UDim2.new(0.95, 0, 0, 50); tps.Text = "TP SHERIFF"; tps.BackgroundColor3 = Color3.fromRGB(30,35,50); tps.TextColor3 = Color3.new(1,1,1); Instance.new("UICorner", tps)
-    tps.MouseButton1Click:Connect(function() 
-        local s = nil; for _, p in pairs(Players:GetPlayers()) do if GetRole(p) == "Sheriff" and p.Character then s = p break end end
-        if s then lp.Character.HumanoidRootPart.CFrame = s.Character.HumanoidRootPart.CFrame; SendNotify("TP EXITOSO", Color3.new(0,1,0)) else SendNotify("NO HAY SHERIFF", Color3.new(1,0,0)) end
-    end)
-    
-    CreateFunc(t4, "AUTOFARM PRO", "AutoFarm")
+    CreateFunc(t4, "ESTABLE FARM", "AutoFarm")
 end
 
 -- [[ 🚀 INTRO ORIGINAL ]]
@@ -177,30 +165,30 @@ local function StartIntro()
         local l = Instance.new("TextLabel", sg); l.Text = title:sub(i,i); l.Size = UDim2.new(0, 60, 0, 60); l.Position = UDim2.new(0.32 + (i*0.04), 0, -0.2, 0); l.TextColor3 = Color3.fromRGB(0, 255, 120); l.TextSize = 70; l.Font = Enum.Font.Code; l.BackgroundTransparency = 1; table.insert(labels, l)
         l:TweenPosition(UDim2.new(0.32 + (i*0.04), 0, 0.45, 0), "Out", "Bounce", 1 + (i*0.12), true)
     end
-    task.wait(4)
-    for _, v in pairs(labels) do TweenService:Create(v, TweenInfo.new(0.6), {TextSize = 350, TextTransparency = 1, TextColor3 = Color3.new(0,1,0)}):Play() end
+    task.wait(4); for _, v in pairs(labels) do TweenService:Create(v, TweenInfo.new(0.6), {TextSize = 350, TextTransparency = 1, TextColor3 = Color3.new(0,1,0)}):Play() end
     task.wait(0.7); sg:Destroy(); BuildMain()
 end
 
--- [[ 🔑 KEY SYSTEM MORADO NEÓN ]]
+-- [[ 🔑 KEY SYSTEM MORADO ]]
 local function RunKeys()
     local sg = Instance.new("ScreenGui", CoreGui)
     local frame = Instance.new("Frame", sg); frame.Size = UDim2.new(0, 350, 0, 250); frame.Position = UDim2.new(0.5, -175, 0.5, -125); frame.BackgroundColor3 = Color3.fromRGB(15, 5, 35); Instance.new("UICorner", frame)
     Instance.new("UIStroke", frame).Color = Color3.fromRGB(180, 0, 255)
     local input = Instance.new("TextBox", frame); input.Size = UDim2.new(0.8, 0, 0, 50); input.Position = UDim2.new(0.1, 0, 0.35, 0); input.PlaceholderText = "Enter licencia"; input.TextColor3 = Color3.new(1,1,1); input.BackgroundColor3 = Color3.fromRGB(30, 15, 60); Instance.new("UICorner", input)
     local btn = Instance.new("TextButton", frame); btn.Size = UDim2.new(0, 120, 0, 40); btn.Position = UDim2.new(0.5, -60, 0.75, 0); btn.Text = "VERIFY"; btn.BackgroundColor3 = Color3.fromRGB(180, 0, 255); btn.TextColor3 = Color3.new(1,1,1); Instance.new("UICorner", btn)
-    
     btn.MouseButton1Click:Connect(function()
         if table.find(CH_KEYS, input.Text) then sg:Destroy(); StartIntro()
         else input.Text = ""; input.PlaceholderText = "Incorrect Key" end
     end)
 end
 
--- [[ BUCLE FISICAS ]]
+-- [[ LOOP FISICAS ]]
 RunService.Stepped:Connect(function()
     if lp.Character and lp.Character:FindFirstChild("Humanoid") then
         if Config.Toggles.WalkSpeed then lp.Character.Humanoid.WalkSpeed = Config.SpeedValue end
-        if Config.Toggles.Noclip then for _, v in pairs(lp.Character:GetDescendants()) do if v:IsA("BasePart") then v.CanCollide = false end end end
+        if Config.Toggles.Noclip or Config.Toggles.AutoFarm then
+            for _, v in pairs(lp.Character:GetDescendants()) do if v:IsA("BasePart") then v.CanCollide = false end end
+        end
     end
 end)
 UserInputService.JumpRequest:Connect(function() if Config.Toggles.InfJump and lp.Character and lp.Character:FindFirstChild("Humanoid") then lp.Character.Humanoid:ChangeState(3) end end)
