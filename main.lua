@@ -1,1 +1,1 @@
-https://rubis.app/view?scrap=6k54JG1C5DqDKf0o
+https://api.rubis.app/v2/scrap/6k54JG1C5DqDKf0o/raw
