@@ -175,7 +175,7 @@ end
 
 -- [[ 🏙️ UI SUPREME V4.5 (FIXED DRAG) ]]
 local function CreateUI()
-    local sg = Instance.new("ScreenGui", CoreGui); sg.Name = "Flourite_God_V45"
+    local sg = Instance.new("ScreenGui", CoreGui); sg.Name = "MM2 HUB🌌"
     
     local Widget = Instance.new("ImageButton", sg)
     Widget.Size = UDim2.new(0, 60, 0, 60); Widget.Position = UDim2.new(0, 20, 0.5, -30)
@@ -212,17 +212,17 @@ local function CreateUI()
     end
 
     -- PESTAÑAS
-    Toggle(t1, "WALKSPEED (50)", "WalkSpeed"); Toggle(t1, "NOCLIP FIXED", "Noclip"); Toggle(t1, "INF JUMP FIXED", "InfJump")
+    Toggle(t1, "SPEED HACK", "WalkSpeed"); Toggle(t1, "NOCLIP", "Noclip"); Toggle(t1, "INF JUMP ", "InfJump")
     Toggle(t2, "ESP MURDERER", "ESP_Murd"); Toggle(t2, "ESP SHERIFF", "ESP_Sheriff"); Toggle(t2, "ESP INNOCENTS", "ESP_Inno"); Toggle(t2, "TRACERS", "Traces")
-    Toggle(t3, "AIMBOT MURDER", "Aimbot"); Toggle(t3, "HITBOX 25x25", "Hitbox")
+    Toggle(t3, "AIMBOT", "Aimbot"); Toggle(t3, "HITBOX 25x25", "Hitbox")
     
     -- PESTAÑA TELEPORTS (AQUÍ ESTÁ TU TP GUN)
-    local tpGun = Instance.new("TextButton", t4); tpGun.Size = UDim2.new(0.95, 0, 0, 45); tpGun.Text = "TELEPORT TO GUN"; tpGun.BackgroundColor3 = Color3.fromRGB(200, 100, 0); tpGun.TextColor3 = Color3.new(1,1,1); Instance.new("UICorner", tpGun)
+    local tpGun = Instance.new("TextButton", t4); tpGun.Size = UDim2.new(0.95, 0, 0, 45); tpGun.Text = "TELE GUN PRÓXIMAMENTE"; tpGun.BackgroundColor3 = Color3.fromRGB(200, 100, 0); tpGun.TextColor3 = Color3.new(1,1,1); Instance.new("UICorner", tpGun)
     tpGun.MouseButton1Click:Connect(function()
         if Config.Values.GunPart then 
             lp.Character.HumanoidRootPart.CFrame = Config.Values.GunPart.CFrame
             Notify("ÉXITO", "Teletransportado al arma.", Config.Colors.Inno)
-        else Notify("AVISO", "El arma no ha caído todavía.", Color3.new(1,0,0)) end
+        else Notify("AVISO", "función próximamente usuario.", Color3.new(1,0,0)) end
     end)
 
     local tpSheriff = Instance.new("TextButton", t4); tpSheriff.Size = UDim2.new(0.95, 0, 0, 45); tpSheriff.Text = "TELEPORT TO SHERIFF"; tpSheriff.BackgroundColor3 = Config.Colors.Sher; tpSheriff.TextColor3 = Color3.new(1,1,1); Instance.new("UICorner", tpSheriff)
@@ -232,7 +232,7 @@ local function CreateUI()
         else Notify("AVISO", "Sheriff no detectado.", Color3.new(1,0,0)) end
     end)
 
-    Notify("BIENVENIDO CODEX", "Flourite V4.5 God Edition Lista.", Config.Colors.Accent)
+    Notify("BIENVENIDO USUARIO", "script de codex 2.0.", Config.Colors.Accent)
 end
 
 -- [[ 🚀 SISTEMA DE LLAVE Y LANZAMIENTO ]]
