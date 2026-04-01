@@ -1,11 +1,3 @@
--- [[ 🌌 FLOURITE SOFTWORKS V4.0 - THE MONSTER EDITION 🌌 ]]
--- [[ DEVELOPER: CODEX & CHRIXUS ]]
--- [[ SYSTEM: 500+ LINES OF PURE LOGIC ]]
--- [[ OPTIMIZED FOR MOBILE EXECUTORS 2026 ]]
-
--- Espera de seguridad para evitar el Error Línea 1 en ejecutores inestables
-task.wait(0.20)
-
 -- [[ 🛡️ MOTOR DE INICIALIZACIÓN ]]
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
